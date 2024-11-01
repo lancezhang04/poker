@@ -8,6 +8,7 @@ from functools import total_ordering
 patterns_order = [
     RoyalFlush, StraightFlush,
     Flush, Straight,
+    ThreeOfAKind, Pair,
     HighCard,
 ]
 
@@ -19,16 +20,26 @@ class Hand:
     type: int
     order: int
 
-    def __init__(self, community_cards, hole_cards):
-        self.community_cards = community_cards
-        self.hole_cards = hole_cards
+    def __init__(self, community_cards):
+        self.community_cards = community_cards.copy()
+        self.hole_cards = list()
+        self._evaluate_hand()
 
+    def _evaluate_hand(self):
         for i, pattern in enumerate(patterns_order):
             match_res = pattern.matches(self.community_cards, self.hole_cards)
             if match_res != -1:
                 self.type = i
                 self.order = match_res
                 break
+
+    def add_hole_card(self, card: Card):
+        self.hole_cards.append(card)
+        self._evaluate_hand()
+
+    def add_community_card(self, card: Card):
+        self.community_cards.append(card)
+        self._evaluate_hand()
 
     def __eq__(self, other: object):
         if not isinstance(other, Hand):

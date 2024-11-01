@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
+from collections import Counter
 
 from card import Card
 
@@ -55,6 +56,8 @@ class Straight(PatternInterface):
     @staticmethod
     def matches(community_cards: List[Card], hole_cards: List[Card]) -> int:
         values = [c.value for c in community_cards + hole_cards]
+        if len(values) < 5:
+            return -1
         cur = bottom = min(values)
         values.remove(cur)
         for dv in range(1, 5):
@@ -62,6 +65,34 @@ class Straight(PatternInterface):
                 return -1
             values.remove(cur + dv)
         return bottom
+
+
+class ThreeOfAKind(PatternInterface):
+
+    @staticmethod
+    def matches(community_cards: List[Card], hole_cards: List[Card]) -> int:
+        cards = community_cards + hole_cards
+        cards_values = [card.value for card in cards]
+        cards_count = Counter(cards_values)
+        res = -1
+        for val, count in cards_count.items():
+            if count >= 3:
+                res = val
+        return res
+
+
+class Pair(PatternInterface):
+
+    @staticmethod
+    def matches(community_cards: List[Card], hole_cards: List[Card]) -> int:
+        cards = community_cards + hole_cards
+        cards_values = [card.value for card in cards]
+        cards_count = Counter(cards_values)
+        res = -1
+        for val, count in cards_count.items():
+            if count >= 2:
+                res = val
+        return res
 
 
 class HighCard(PatternInterface):
