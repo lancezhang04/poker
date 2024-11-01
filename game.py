@@ -77,6 +77,12 @@ class Game:
         else:
             print("Players are tied\n")
 
+    def play_simple(self):
+        total = 0
+        wins = 0
+        while (True):
+            pass
+
 
 if __name__ == "__main__":
     game: Game = Game(verbose=True)
