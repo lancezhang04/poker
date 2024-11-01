@@ -42,11 +42,11 @@ class Flush(PatternInterface):
     def matches(community_cards: List[Card], hole_cards: List[Card]) -> int:
         hand = community_cards + hole_cards
         if len(hand) < 5:
-            return False
+            return -1
         suit = hand[0].suit
         card_pattern = Card(suit, -1)
         if not all(map(lambda c: c == card_pattern, hand)):
-            return False
+            return -1
         return max([card.value for card in hand])
 
 
@@ -62,3 +62,13 @@ class Straight(PatternInterface):
                 return -1
             values.remove(cur + dv)
         return bottom
+
+
+class HighCard(PatternInterface):
+
+    @staticmethod
+    def matches(community_cards: List[Card], hole_cards: List[Card]) -> int:
+        cards = community_cards + hole_cards
+        if len(cards) == 0:
+            return -1
+        return max([card.value for card in cards])

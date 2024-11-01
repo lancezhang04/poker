@@ -38,8 +38,9 @@ class Card:
     def __str__(self):
         return self.VALUES_TO_NAMES[self.value] + " of " + self.suit.name.lower()
 
-    def __eq__(self, other: "Card"):
-        assert type(other) == Card
+    def __eq__(self, other: object):
+        if not isinstance(other, Card):
+            return False
         value_eq = (self.value == other.value) or (self.value == -1 or other.value == -1)
         suit_eq = (self.suit == other.suit) or (self.suit == Suit.WILD or other.suit == Suit.WILD)
         return value_eq and suit_eq

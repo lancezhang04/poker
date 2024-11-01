@@ -1,7 +1,8 @@
 import unittest
 
-from card import Card, Suit
 from pattern import *
+from card import Card, Suit
+from hand import Hand
 
 
 class Tests(unittest.TestCase):
@@ -67,6 +68,56 @@ class Tests(unittest.TestCase):
             Card(Suit.SPADES, 8),
         ]
         assert StraightFlush.matches(hand[:3], hand[3:]) == 4
+
+    def test_hand_compare_1(self):
+        hand1 = Hand([Card(Suit.SPADES, 1)], [])
+        hand2 = Hand([Card(Suit.SPADES, 2)], [])
+        assert hand2 > hand1
+
+    def test_hand_compare_2(self):
+        hand1 = Hand([Card(Suit.SPADES, 4)], [Card(Suit.SPADES, 5)])
+        hand2 = Hand([Card(Suit.SPADES, 5)], [])
+        assert hand2 == hand1
+
+    def test_hand_compare_3(self):
+        community_cards = [
+            Card(Suit.SPADES, 3),
+            Card(Suit.CLUBS, 4),
+            Card(Suit.DIAMONDS, 5),
+        ]
+        hole_cards1 = [
+            Card(Suit.SPADES, 1),
+            Card(Suit.HEART, 2),
+        ]
+        hole_cards2 = [
+            Card(Suit.SPADES, 6),
+            Card(Suit.CLUBS, 7),
+        ]
+        hand1 = Hand(community_cards, hole_cards1)
+        assert hand1.order == 1
+        hand2 = Hand(community_cards, hole_cards2)
+        assert hand2.order == 3
+        assert hand1 < hand2
+
+    def test_hand_compare_4(self):
+        community_cards = [
+            Card(Suit.SPADES, 9),
+            Card(Suit.SPADES, 10),
+            Card(Suit.SPADES, 11),
+        ]
+        hole_cards1 = [
+            Card(Suit.SPADES, 12),
+            Card(Suit.SPADES, 13),
+        ]
+        hole_cards2 = [
+            Card(Suit.SPADES, 7),
+            Card(Suit.CLUBS, 8),
+        ]
+        hand1 = Hand(community_cards, hole_cards1)
+        assert hand1.order == 0
+        hand2 = Hand(community_cards, hole_cards2)
+        assert hand2.order == 7
+        assert hand1 > hand2
 
 
 if __name__ == '__main__':
