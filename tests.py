@@ -2,7 +2,7 @@ import unittest
 
 from pattern import *
 from card import Card, Suit
-from hand import Hand
+from hand import Hand, PATTERNS_ORDER
 
 
 class Tests(unittest.TestCase):
@@ -118,6 +118,80 @@ class Tests(unittest.TestCase):
         hand2 = Hand(community_cards, hole_cards2)
         assert hand2.order == 7
         assert hand1 > hand2
+
+    def test_hand_match_1(self):
+        community_cards = [
+            Card(Suit.SPADES, 9),
+            Card(Suit.DIAMONDS, 9),
+            Card(Suit.CLUBS, 9),
+            Card(Suit.HEART, 8),
+        ]
+        hole_cards = [
+            Card(Suit.HEART, 9),
+            Card(Suit.HEART, 2),
+        ]
+        hand = Hand(community_cards, hole_cards)
+        assert PATTERNS_ORDER[hand.type] == FourOfAKind
+        assert hand.order == 9
+
+    def test_hand_match_2(self):
+        community_cards = [
+            Card(Suit.HEART, 7),
+            Card(Suit.HEART, 8),
+            Card(Suit.HEART, 9),
+        ]
+        hole_cards = [
+            Card(Suit.HEART, 10),
+            Card(Suit.HEART, 11),
+        ]
+        hand = Hand(community_cards, hole_cards)
+        assert PATTERNS_ORDER[hand.type] == StraightFlush
+        assert hand.order == 7
+
+    def test_hand_match_3(self):
+        community_cards = [
+            Card(Suit.SPADES, 4),
+            Card(Suit.SPADES, 6),
+            Card(Suit.SPADES, 9),
+            Card(Suit.HEART, 2),
+        ]
+        hole_cards = [
+            Card(Suit.SPADES, 10),
+            Card(Suit.SPADES, 12),
+        ]
+        hand = Hand(community_cards, hole_cards)
+        assert PATTERNS_ORDER[hand.type] == Flush
+        assert hand.order == 12
+
+    def test_hand_match_4(self):
+        community_cards = [
+            Card(Suit.CLUBS, 5),
+            Card(Suit.DIAMONDS, 5),
+            Card(Suit.HEART, 7),
+            Card(Suit.SPADES, 9),
+            Card(Suit.HEART, 2),
+        ]
+        hole_cards = [
+            Card(Suit.HEART, 5),
+            Card(Suit.CLUBS, 6),
+        ]
+        hand = Hand(community_cards, hole_cards)
+        assert PATTERNS_ORDER[hand.type] == ThreeOfAKind
+        assert hand.order == 5
+
+    def test_hand_match_5(self):
+        community_cards = [
+            Card(Suit.SPADES, 1),
+            Card(Suit.HEART, 4),
+            Card(Suit.DIAMONDS, 8),
+        ]
+        hole_cards = [
+            Card(Suit.CLUBS, 6),
+            Card(Suit.HEART, 13),
+        ]
+        hand = Hand(community_cards, hole_cards)
+        assert PATTERNS_ORDER[hand.type] == HighCard
+        assert hand.order == 13
 
 
 if __name__ == '__main__':

@@ -5,8 +5,8 @@ from functools import total_ordering
 
 
 # TODO: implement all other patterns
-patterns_order = [
-    RoyalFlush, StraightFlush,
+PATTERNS_ORDER = [
+    RoyalFlush, StraightFlush, FourOfAKind,
     Flush, Straight,
     ThreeOfAKind, Pair,
     HighCard,
@@ -28,9 +28,8 @@ class Hand:
             self.hole_cards = hole_cards
         self._evaluate_hand()
 
-    # TODO: start from worst pattern to reduce runtime
     def _evaluate_hand(self):
-        for i, pattern in enumerate(patterns_order):
+        for i, pattern in enumerate(PATTERNS_ORDER):
             match_res = pattern.matches(self.community_cards, self.hole_cards)
             if match_res != -1:
                 self.type = i

@@ -36,19 +36,25 @@ class StraightFlush(PatternInterface):
             return -1
         return Straight.matches(community_cards, hole_cards)
 
+class FourOfAKind(PatternInterface):
+
+    @staticmethod
+    def matches(community_cards: List[Card], hole_cards: List[Card]) -> int:
+        return multiple_matches(community_cards, hole_cards, 4)
+
 
 class Flush(PatternInterface):
 
     @staticmethod
     def matches(community_cards: List[Card], hole_cards: List[Card]) -> int:
-        hand = community_cards + hole_cards
-        if len(hand) < 5:
-            return -1
-        suit = hand[0].suit
-        card_pattern = Card(suit, -1)
-        if not all(map(lambda c: c == card_pattern, hand)):
-            return -1
-        return max([card.value for card in hand])
+        cards = community_cards + hole_cards
+        cards_suits = [card.suit for card in cards]
+        suits_count = Counter(cards_suits)
+        for suit, count in suits_count.items():
+            if count >= 5:
+                # two flushes are compared based on high card in flush
+                return max([card.value for card in cards if card.suit == suit])
+        return -1
 
 
 class Straight(PatternInterface):
@@ -71,28 +77,14 @@ class ThreeOfAKind(PatternInterface):
 
     @staticmethod
     def matches(community_cards: List[Card], hole_cards: List[Card]) -> int:
-        cards = community_cards + hole_cards
-        cards_values = [card.value for card in cards]
-        cards_count = Counter(cards_values)
-        res = -1
-        for val, count in cards_count.items():
-            if count >= 3:
-                res = val
-        return res
+        return multiple_matches(community_cards, hole_cards, 3)
 
 
 class Pair(PatternInterface):
 
     @staticmethod
     def matches(community_cards: List[Card], hole_cards: List[Card]) -> int:
-        cards = community_cards + hole_cards
-        cards_values = [card.value for card in cards]
-        cards_count = Counter(cards_values)
-        res = -1
-        for val, count in cards_count.items():
-            if count >= 2:
-                res = val
-        return res
+        return multiple_matches(community_cards, hole_cards, 2)
 
 
 class HighCard(PatternInterface):
@@ -103,3 +95,14 @@ class HighCard(PatternInterface):
         if len(cards) == 0:
             return -1
         return max([card.value for card in cards])
+
+
+def multiple_matches(community_cards: List[Card], hole_cards: List[Card], multiple: int) -> int:
+    cards = community_cards + hole_cards
+    cards_values = [card.value for card in cards]
+    cards_count = Counter(cards_values)
+    res = -1
+    for val, count in cards_count.items():
+        if count >= multiple:
+            res = val
+    return res
