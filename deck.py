@@ -12,7 +12,7 @@ class Deck:
     def __init__(self, full_decks=0):
         self.cards = list()
         for _ in range(full_decks):
-            for suit in Suit:
+            for suit in [Suit.HEART, Suit.DIAMONDS, Suit.SPADES, Suit.CLUBS]:
                 for value in range(1, 14):
                     self.add_card(Card(suit, value))
 
