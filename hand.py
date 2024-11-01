@@ -20,11 +20,15 @@ class Hand:
     type: int
     order: int
 
-    def __init__(self, community_cards):
+    def __init__(self, community_cards, hole_cards=None):
         self.community_cards = community_cards.copy()
-        self.hole_cards = list()
+        if hole_cards is None:
+            self.hole_cards = list()
+        else:
+            self.hole_cards = hole_cards
         self._evaluate_hand()
 
+    # TODO: start from worst pattern to reduce runtime
     def _evaluate_hand(self):
         for i, pattern in enumerate(patterns_order):
             match_res = pattern.matches(self.community_cards, self.hole_cards)

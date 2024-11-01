@@ -1,3 +1,5 @@
+from math import trunc
+
 from card import Card
 from hand import Hand
 from deck import Deck
@@ -17,9 +19,11 @@ class Game:
         self.deck = Deck(full_decks=full_decks)
         self.community_cards = list()
         self.player_hands = list()
+        self.num_players = num_players
         self.verbose = verbose
 
-        for _ in range(num_players):
+    def deal_starting_cards(self):
+        for _ in range(self.num_players):
             self.player_hands.append(Hand(self.community_cards))
             for _ in range(2):
                 self.player_hands[-1].add_hole_card(self.deck.draw_card())
@@ -76,6 +80,7 @@ class Game:
 
 if __name__ == "__main__":
     game: Game = Game(verbose=True)
+    game.deal_starting_cards()
     game.cur_winner()
     game.turn()
     game.cur_winner()
