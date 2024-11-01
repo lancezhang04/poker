@@ -5,6 +5,7 @@ from random import randint
 
 
 class Deck:
+
     # TODO: make this a hash list if we need to save time
     cards: List[Card]
 

@@ -3,6 +3,7 @@ from typing import Dict
 
 
 class Suit(Enum):
+
     WILD = -1  # wild suit (used for matching)
     CLUBS = 0  # black, even
     DIAMONDS = 1  # red, odd
@@ -16,6 +17,7 @@ class Suit(Enum):
         return suit.value % 2
 
 class Card:
+
     suit: Suit
     value: int
 
@@ -27,7 +29,7 @@ class Card:
     NAMES_TO_VALUES: Dict[str, int] = {v: k for k, v in VALUES_TO_NAMES.items()}
 
     def __init__(self, suit: Suit, value: int):
-        assert 1 <= value <= 13
+        assert 1 <= value <= 13 or value == -1
         self.suit = suit
         self.value = value
 

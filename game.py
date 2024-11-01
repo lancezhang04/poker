@@ -5,6 +5,7 @@ from typing import List
 
 
 class Game:
+
     deck: Deck
     community_cards: List[Card]
     # TODO: create player object
