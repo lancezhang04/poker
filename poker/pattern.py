@@ -43,6 +43,32 @@ class FourOfAKind(PatternInterface):
         return multiple_matches(community_cards, hole_cards, 4)
 
 
+class FullHouse(PatternInterface):
+
+    @staticmethod
+    def matches(community_cards: List[Card], hole_cards: List[Card]) -> int:
+        # TODO: test edge case – 2 x three of a kind
+        cards = community_cards + hole_cards
+        cards_values = [card.value for card in cards]
+        cards_count = Counter(cards_values)
+
+        triplets = set()
+        pairs = set()
+        for val, count in cards_count.items():
+            if count >= 3:
+                triplets.add(val)
+            if count >= 2:
+                pairs.add(val)
+
+        if len(triplets) == 0 or len(pairs) < 2:
+            return -1
+
+        triplet_val = max(triplets)
+        pairs.remove(triplet_val)
+        pair_val = max(pairs)
+        return triplet_val * 100 + pair_val
+
+
 class Flush(PatternInterface):
 
     @staticmethod
@@ -78,6 +104,25 @@ class ThreeOfAKind(PatternInterface):
     @staticmethod
     def matches(community_cards: List[Card], hole_cards: List[Card]) -> int:
         return multiple_matches(community_cards, hole_cards, 3)
+
+
+class TwoPairs(PatternInterface):
+
+    @staticmethod
+    def matches(community_cards: List[Card], hole_cards: List[Card]) -> int:
+        cards = community_cards + hole_cards
+        cards_values = [card.value for card in cards]
+        cards_count = Counter(cards_values)
+
+        pairs = list()
+        for val, count in cards_count.items():
+            if count >= 2:
+                pairs.append(val)
+
+        if len(pairs) < 2:
+            return -1
+        pairs.sort(reverse=True)
+        return pairs[0] * 100 + pairs[1]
 
 
 class Pair(PatternInterface):

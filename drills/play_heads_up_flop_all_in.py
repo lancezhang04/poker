@@ -1,8 +1,9 @@
 from typing import List
+from tqdm import tqdm
 from poker.game import Game
 
 
-def play_flop():
+def play_flop(simulate=True):
     """
     0: folded, would have won
     1: folded, would have lost
@@ -43,6 +44,10 @@ def play_flop():
         game.river()
         winner = game.cur_winner()
 
+        if simulate:
+            win_prob = simulate_win_prob(game.player_hands[0].hole_cards)
+            print(f"Simulated win probability: {win_prob * 100:.2f}%")
+
         if ans == "fold":
             stats[winner] += 1
         if ans == "bet":
@@ -68,3 +73,19 @@ def play_flop():
             balance_str = "-" + balance_str
         print(f"Balance: {balance_str}")
         print()
+
+def simulate_win_prob(hole_cards, num_iters=100):
+    wins = 0
+    for _ in tqdm(range(num_iters), ncols=80):
+        game = Game()
+        game.deal_starting_cards()
+        game.player_hands[0].hole_cards = hole_cards
+        game.turn()
+        game.river()
+        if game.cur_winner() == 0:
+            wins += 1
+    return wins / num_iters
+
+
+if __name__ == "__main__":
+    play_flop()

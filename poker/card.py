@@ -16,7 +16,7 @@ class Suit(Enum):
     CLUBS = 0  # black, even
     DIAMONDS = 1  # red, odd
     SPADES = 2
-    HEART = 3
+    HEARTS = 3
 
     @staticmethod
     def get_color(suit: "Suit") -> int:

@@ -16,6 +16,7 @@ class Game:
     verbose: bool
 
     def __init__(self, num_players=2, full_decks=1, verbose=False):
+        self.full_decks = full_decks
         self.deck = Deck(full_decks=full_decks)
         self.community_cards = list()
         self.player_hands = list()
@@ -27,7 +28,6 @@ class Game:
             self.player_hands.append(Hand(self.community_cards))
             for _ in range(2):
                 self.player_hands[-1].add_hole_card(self.deck.draw_card())
-        self.flop()
 
         if self.verbose:
             for i, hand in enumerate(self.player_hands):
@@ -68,6 +68,10 @@ class Game:
         return self.deal_card(4)
 
     def cur_winner(self, verbose=False) -> int:
+        # TODO: support multiple players
+        if self.num_players != 2:
+            raise NotImplementedError("Currently only supports 2 players")
+
         if verbose:
             print(f"Player 0 type: {self.player_hands[0].type}, order: {self.player_hands[0].order}")
             print(f"Player 1 type: {self.player_hands[1].type}, order: {self.player_hands[1].order}")
