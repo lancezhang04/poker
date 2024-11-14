@@ -4,7 +4,6 @@ from poker.card import Card
 from functools import total_ordering
 
 
-# TODO: implement all other patterns - Two Pairs
 PATTERNS_ORDER = [
     RoyalFlush, StraightFlush, FourOfAKind,
     FullHouse, Flush, Straight,
@@ -13,7 +12,6 @@ PATTERNS_ORDER = [
 ]
 
 
-# TODO: reconsider hand evaluation implementation
 @total_ordering
 class Hand:
     community_cards: List[Card]
@@ -39,22 +37,18 @@ class Hand:
 
     def add_hole_card(self, card: Card):
         self.hole_cards.append(card)
-        # self._evaluate_hand()
+        self._evaluate_hand()
 
     def add_community_card(self, card: Card):
         self.community_cards.append(card)
-        # self._evaluate_hand()
+        self._evaluate_hand()
 
     def __eq__(self, other: object):
-        # TODO: necessary at each call?
-        self._evaluate_hand()
         if not isinstance(other, Hand):
             return False
         return self.type == other.type and self.order == other.order
 
     def __gt__(self, other: object):
-        # TODO: necessary at each call?
-        self._evaluate_hand()
         if not isinstance(other, Hand):
             return False
         if self.type != other.type:
