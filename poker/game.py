@@ -1,4 +1,6 @@
-from poker import Card, Hand, Deck
+from poker.card import Card
+from poker.hand import Hand
+from poker.deck import Deck
 from typing import List
 
 

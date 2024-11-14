@@ -52,6 +52,7 @@ def play_flop(num_players=2, simulate=True):
                 game.player_hands[0].hole_cards,
                 game.community_cards[:3],
                 num_players=num_players,
+                # show_plot=True,
             )
             if win_prob < 0.5:
                 print("Folding was the correct decision!")

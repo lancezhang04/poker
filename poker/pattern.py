@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import List
 from collections import Counter
 
-from poker import Card
+from poker.card import Card
 
 
 class PatternInterface(ABC):

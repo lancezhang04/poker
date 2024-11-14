@@ -1,4 +1,4 @@
-from poker import Card, Suit
+from poker.card import Card, Suit
 
 from typing import List
 from random import randint
