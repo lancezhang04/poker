@@ -1,5 +1,5 @@
-from pattern import *
-from card import Card
+from poker.pattern import *
+from poker.card import Card
 
 from functools import total_ordering
 

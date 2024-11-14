@@ -1,8 +1,8 @@
 from math import trunc
 
-from card import Card
-from hand import Hand
-from deck import Deck
+from poker.card import Card
+from poker.hand import Hand
+from poker.deck import Deck
 
 from typing import List
 

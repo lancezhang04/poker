@@ -2,6 +2,14 @@ from enum import Enum
 from typing import Dict
 
 
+SUIT_SYMBOLS = {
+    "hearts": '\u2665',
+    "diamonds": '\u2666',
+    "clubs": '\u2663',
+    "spades": '\u2660',
+}
+
+
 class Suit(Enum):
 
     WILD = -1  # wild suit (used for matching)
@@ -17,6 +25,7 @@ class Suit(Enum):
         return suit.value % 2
 
 
+# TODO: initialize with string, e.g. "spades", "two", much more intuitive
 class Card:
 
     suit: Suit
@@ -36,7 +45,8 @@ class Card:
         self.value = value
 
     def __str__(self):
-        return self.VALUES_TO_NAMES[self.value] + " of " + self.suit.name.lower()
+        symbol: str = SUIT_SYMBOLS[self.suit.name.lower()]
+        return self.VALUES_TO_NAMES[self.value] + " of " + symbol
 
     def __eq__(self, other: object):
         if not isinstance(other, Card):

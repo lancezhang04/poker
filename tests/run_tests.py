@@ -1,8 +1,8 @@
 import unittest
 
-from pattern import *
-from card import Card, Suit
-from hand import Hand, PATTERNS_ORDER
+from poker.pattern import *
+from poker.card import Card, Suit
+from poker.hand import Hand, PATTERNS_ORDER
 
 
 class Tests(unittest.TestCase):
