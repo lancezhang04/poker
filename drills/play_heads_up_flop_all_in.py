@@ -7,7 +7,7 @@ from poker.deck import Deck
 from poker.hand import Hand
 
 
-def play_flop(simulate=True):
+def play_flop(num_players=2, simulate=True):
     """
     If simulate == False, stats corresponds to
         0: folded, would have won
@@ -30,7 +30,7 @@ def play_flop(simulate=True):
 
     for i in range(num_rounds):
         print(f"Round {i + 1} out of {num_rounds}")
-        game = Game(num_players=2)
+        game = Game(num_players=num_players)
         game.deal_starting_cards()
         game.flop()
         print("Flop:")
@@ -50,9 +50,9 @@ def play_flop(simulate=True):
         if simulate:
             win_prob = simulate_win_prob(
                 game.player_hands[0].hole_cards,
-                game.community_cards[:3]
+                game.community_cards[:3],
+                num_players=num_players,
             )
-            print(f"Simulated win probability: {win_prob * 100:.2f}%")
             if win_prob < 0.5:
                 print("Folding was the correct decision!")
                 if ans in ["fold", "f"]:
@@ -61,7 +61,8 @@ def play_flop(simulate=True):
                 print("Betting was the correct decision!")
                 if ans in ["bet", "b"]:
                     balance += 1
-            print(f"Record: {balance}/{i + 1} or {balance / (i + 1) * 100:.2f}%\n")
+            print(f"Record: {balance}/{i + 1} or {balance / (i + 1) * 100:.2f}%")
+            print(f"Simulated win probability: {win_prob * 100:.2f}%\n")
         else:
             game.turn()
             game.river()
@@ -92,12 +93,13 @@ def play_flop(simulate=True):
             print()
 
 
-def simulate_win_prob(hole_cards, flop_cards, num_iters=5000, show_plot=False, verbose=False):
+def simulate_win_prob(hole_cards, flop_cards, num_players=2, num_iters=5000,
+                      show_plot=False, verbose=False):
     wins = 0
     data = [list(), list()]
 
     for i in tqdm(range(num_iters), ncols=80):
-        game = Game()
+        game = Game(num_players=num_players)
         game.deck = Deck(game.full_decks)
         for card in hole_cards + flop_cards:
             game.deck.remove_card(card)
@@ -140,4 +142,4 @@ def simulate_win_prob(hole_cards, flop_cards, num_iters=5000, show_plot=False, v
 
 
 if __name__ == "__main__":
-    play_flop()
+    play_flop(num_players=6)

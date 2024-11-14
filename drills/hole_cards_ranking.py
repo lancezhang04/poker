@@ -1,7 +1,7 @@
 import random
 
 
-with open("hole_cards_percentiles.txt", 'r') as f:
+with open("drills/hole_cards_top_percentiles.txt", 'r') as f:
     lines = f.readlines()
 
 rankings = dict()
@@ -10,14 +10,14 @@ for i, line in enumerate(lines):
     for pair in hole_cards_pairs:
         rankings[pair] = i
 print(f"Total pairs recorded: {len(rankings)}")
-print("Rank is defined as a pair of hole cards being the top _% of all possibilities")
+print("Top percentile is defined as a pair of hole cards being the top _% of all possibilities\n")
 pairs = list(rankings.keys())
 
 total_abs_error = 0
 total = 0
 while True:
     pair = random.choice(pairs)
-    ans = input(f"What is the ranking for {pair}? >> ")
+    ans = input(f"What is the top percentile for {pair}? >> ")
     rank = -1
     while rank == -1:
         try:
@@ -28,6 +28,8 @@ while True:
             ans = input("Please enter a valid rank >> ")
     print(f"Answer is: {rankings[pair]}")
 
-    total_abs_error += abs(rank - rankings[pair])
+    abs_error = abs(rank - rankings[pair])
+    total_abs_error += abs_error
     total += 1
-    print(f"Mean absolute error: {total_abs_error / total:.3f}")
+    print(f"Absolute error: {abs_error}")
+    print(f"Mean absolute error so far: {total_abs_error / total:.3f}\n")

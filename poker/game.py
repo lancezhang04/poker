@@ -69,8 +69,8 @@ class Game:
 
     def cur_winner(self, verbose=False) -> int:
         # TODO: support multiple players
-        if self.num_players != 2:
-            raise NotImplementedError("Currently only supports 2 players")
+        if verbose and self.num_players != 2:
+            raise NotImplementedError("Currently only supports 2 players for verbose option")
 
         if verbose:
             print(f"Player 0 type: {self.player_hands[0].type}, order: {self.player_hands[0].order}")
