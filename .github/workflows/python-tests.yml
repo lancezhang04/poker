@@ -18,4 +18,4 @@ jobs:
 
     - name: Run tests
       run: |
-        python tests.py
+        cd tests & python tests.py
