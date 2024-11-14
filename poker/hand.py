@@ -19,12 +19,15 @@ class Hand:
     type: int
     order: int
 
-    def __init__(self, community_cards, hole_cards=None):
-        self.community_cards = community_cards.copy()
+    def __init__(self, community_cards: List[Card]=None, hole_cards: List[Card]=None):
+        if community_cards is None:
+            self.community_cards = list()
+        else:
+            self.community_cards = community_cards.copy()
         if hole_cards is None:
             self.hole_cards = list()
         else:
-            self.hole_cards = hole_cards
+            self.hole_cards = hole_cards.copy()
         self._evaluate_hand()
 
     def _evaluate_hand(self):
