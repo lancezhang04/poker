@@ -9,12 +9,13 @@ from poker.hand import Hand
 
 def play_flop(simulate=True):
     """
-    0: folded, would have won
-    1: folded, would have lost
-    2: folded, would have drawn
-    3: bet, won
-    4: bet, lost
-    5: best, drew
+    If simulate == False, stats corresponds to
+        0: folded, would have won
+        1: folded, would have lost
+        2: folded, would have drawn
+        3: bet, won
+        4: bet, lost
+        5: best, drew
     """
     stats: List[int] = [0, 0, 0, 0, 0, 0]
     balance: int = 0
@@ -90,6 +91,7 @@ def play_flop(simulate=True):
             print(f"Balance: {balance_str}")
             print()
 
+
 def simulate_win_prob(hole_cards, flop_cards, num_iters=5000, show_plot=False, verbose=False):
     wins = 0
     data = [list(), list()]
@@ -139,15 +141,3 @@ def simulate_win_prob(hole_cards, flop_cards, num_iters=5000, show_plot=False, v
 
 if __name__ == "__main__":
     play_flop()
-
-    # from poker.card import Card, Suit
-    # comm_cards = [
-    #     Card(Suit.HEARTS, 11),
-    #     Card(Suit.DIAMONDS, 5),
-    #     Card(Suit.SPADES, 5),
-    # ]
-    # hole_cards = [
-    #     Card(Suit.CLUBS, 11),
-    #     Card(Suit.HEARTS, 6),
-    # ]
-    # print(simulate_win_prob(hole_cards, comm_cards, num_iters=10000))
