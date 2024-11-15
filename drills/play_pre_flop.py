@@ -1,13 +1,11 @@
-from typing import List
-from tqdm import tqdm
-import matplotlib.pyplot as plt
 from argparse import ArgumentParser
-
-from poker import Card, Game
 from drills.utils import clear_screen, print_ending_message
 
+from poker import Game
+from simulation.simulation import run_monte_carlo
 
-def play_flop(num_players: int=2, verbose: bool=False):
+
+def play_pre_flop(num_players: int=2, verbose: bool=False):
     score: int = 0
     # fair assumption?
     threshold = 1 / num_players
@@ -28,13 +26,7 @@ def play_flop(num_players: int=2, verbose: bool=False):
         game = Game(num_players=num_players, verbose=verbose)
         game.deal_starting_cards()
         game.flop()
-        print("Flop:")
-        for card in game.community_cards:
-            print("  " + str(card))
-        print("Hole cards:")
-        for card in game.player_hands[0].hole_cards:
-            print("  " + str(card))
-        print()
+        game.print_hero_board()
 
         ans = ""
         while ans not in ["fold", "bet", "f", "b"]:
@@ -42,11 +34,11 @@ def play_flop(num_players: int=2, verbose: bool=False):
             if ans.lower() == "quit":
                 exit(0)
 
-        win_prob = simulate_win_prob(
+        win_prob = run_monte_carlo(
             game.player_hands[0].hole_cards,
-            game.community_cards[:3],
+            game.community_cards,
             num_players=num_players,
-            # show_plot=True,
+            num_iters=5000
         )
         if win_prob < threshold:
             print(f"Folding was the right decision with threshold {threshold:.3f}")
@@ -63,35 +55,10 @@ def play_flop(num_players: int=2, verbose: bool=False):
     print_ending_message(score / num_rounds)
 
 
-def simulate_win_prob(hole_cards: List[Card], flop_cards: List[Card],
-                      num_players: int=2, num_iters: int=5000, show_plot: bool=False):
-    wins: int = 0
-    data: List[List] = [list(), list()]
-
-    for i in tqdm(range(num_iters), ncols=80):
-        game = Game(num_players=num_players)
-        game.set_state([hole_cards], flop_cards)
-        game.turn()
-        game.river()
-        if game.cur_winner() == 0:
-            wins += 1
-
-        if show_plot and (i + 1) % 100 == 0:
-            data[0].append(i + 1)
-            data[1].append(wins / (i + 1))
-
-    if show_plot:
-        plt.plot(data[0], data[1], label=f"Final: {wins / num_iters * 100:.3f}%")
-        plt.ylim([0, 1])
-        plt.legend()
-        plt.show()
-    return wins / num_iters
-
-
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--num_players", "-n", default=2, type=int, help="Number of players")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 
-    play_flop(num_players=args.num_players, verbose=args.verbose)
+    play_pre_flop(num_players=args.num_players, verbose=args.verbose)

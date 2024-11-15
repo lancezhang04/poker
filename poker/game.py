@@ -86,6 +86,17 @@ class Game:
         # set community cards to match
         self.community_cards = community_cards.copy()
 
+    def print_hero_board(self):
+        print("Community cards:")
+        for card in self.community_cards:
+            print("  " + str(card))
+        if len(self.community_cards) == 0:
+            print("  None")
+        print("Hole cards:")
+        for card in self.player_hands[0].hole_cards:
+            print("  " + str(card))
+        print()
+
     def cur_winner(self) -> int:
         best_hand = self.player_hands[0]
         best_player_idx = 0
