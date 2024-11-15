@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from argparse import ArgumentParser
 
 from poker import Card, Game
-from drills.utils import clear_screen
+from drills.utils import clear_screen, print_ending_message
 
 
 def play_flop(num_players: int=2, verbose: bool=False):
@@ -60,12 +60,13 @@ def play_flop(num_players: int=2, verbose: bool=False):
         print(f"Simulated win probability: {win_prob * 100:.2f}%\n")
 
         input(f"Press enter to continue...")
+    print_ending_message(score / num_rounds)
 
 
 def simulate_win_prob(hole_cards: List[Card], flop_cards: List[Card],
                       num_players: int=2, num_iters: int=5000, show_plot: bool=False):
-    wins = 0
-    data = [list(), list()]
+    wins: int = 0
+    data: List[List] = [list(), list()]
 
     for i in tqdm(range(num_iters), ncols=80):
         game = Game(num_players=num_players)
