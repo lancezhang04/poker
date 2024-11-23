@@ -4,7 +4,11 @@ from tqdm import tqdm
 
 
 def run_monte_carlo(hole_cards: List[Card], community_cards: List[Card]=None,
-                    num_players: int=6, num_iters: int=5000):
+                    num_players: int=6, num_iters: int=5000, verbose=False):
+    if verbose:
+        print("Hole cards: " + ", ".join([str(c) for c in hole_cards]))
+        print("Community cards: " + ", ".join([str(c) for c in community_cards]))
+
     # assumes player 0 is the hero
     wins: int = 0
     for _ in tqdm(range(num_iters), ncols=80):

@@ -1,3 +1,4 @@
 .idea/
 __pycache__/
 count_lines.sh
+.DS_Store

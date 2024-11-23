@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 
 from drills.utils import clear_screen
 from poker import Game
-from simulation.simulation import run_monte_carlo
+from simulation.monte_carlo import run_monte_carlo
 
 
 def play_equity(num_rounds=5):

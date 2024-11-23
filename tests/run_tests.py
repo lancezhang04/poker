@@ -8,130 +8,158 @@ from poker.hand import Hand, PATTERNS_ORDER
 class Tests(unittest.TestCase):
 
     def test_card_eq(self):
-        card1 = Card(Suit.WILD, 1)
-        card2 = Card(Suit.SPADES, 1)
+        card1 = Card(1, Suit.WILD)
+        card2 = Card(1, Suit.SPADES)
         assert card1 == card2
 
     def test_wild_1(self):
-        card1 = Card(Suit.SPADES, 1)
-        card2 = Card(Suit.SPADES, -1)
+        card1 = Card(1, Suit.SPADES)
+        card2 = Card(-1, Suit.SPADES)
         assert card1 == card2
 
     def test_wild_2(self):
-        card1 = Card(Suit.WILD, -1)
-        card2 = Card(Suit.WILD, -1)
+        card1 = Card(-1, Suit.WILD)
+        card2 = Card(-1, Suit.WILD)
         assert card1 == card2
 
     def test_wild_3(self):
-        card1 = Card(Suit.SPADES, -1)
-        card2 = Card(Suit.DIAMONDS, 5)
+        card1 = Card(-1, Suit.SPADES)
+        card2 = Card(5, Suit.DIAMONDS)
         assert card1 != card2
 
     def test_two_pairs(self):
         community_cards = [
-            Card(Suit.DIAMONDS, 1),
-            Card(Suit.SPADES, 2),
-            Card(Suit.CLUBS, 3),
+            Card(1, Suit.DIAMONDS),
+            Card(2, Suit.SPADES),
+            Card(3, Suit.CLUBS),
         ]
         hole_cards = [
-            Card(Suit.SPADES, 1),
-            Card(Suit.SPADES, 3),
+            Card(1, Suit.SPADES),
+            Card(3, Suit.SPADES),
         ]
         assert TwoPairs.matches(community_cards, hole_cards) == 301
 
     def test_full_house_1(self):
         community_cards = [
-            Card(Suit.DIAMONDS, 11),
-            Card(Suit.SPADES, 2),
-            Card(Suit.CLUBS, 3),
-            Card(Suit.DIAMONDS, 3),
-            Card(Suit.CLUBS, 9),
+            Card(11, Suit.DIAMONDS),
+            Card(2, Suit.SPADES),
+            Card(3, Suit.CLUBS),
+            Card(3, Suit.DIAMONDS),
+            Card(9, Suit.CLUBS),
         ]
         hole_cards = [
-            Card(Suit.SPADES, 11),
-            Card(Suit.SPADES, 3),
+            Card(11, Suit.SPADES),
+            Card(3, Suit.SPADES),
         ]
         assert FullHouse.matches(community_cards, hole_cards) == 311
 
     def test_full_house_2(self):
         community_cards = [
-            Card(Suit.DIAMONDS, 13),
-            Card(Suit.SPADES, 13),
-            Card(Suit.CLUBS, 13),
-            Card(Suit.DIAMONDS, 9),
-            Card(Suit.CLUBS, 9),
+            Card(13, Suit.DIAMONDS),
+            Card(13, Suit.SPADES),
+            Card(13, Suit.CLUBS),
+            Card(9, Suit.DIAMONDS),
+            Card(9, Suit.CLUBS),
         ]
         hole_cards = [
-            Card(Suit.SPADES, 9),
-            Card(Suit.HEARTS, 13),
+            Card(9, Suit.SPADES),
+            Card(13, Suit.HEARTS),
         ]
         assert FullHouse.matches(community_cards, hole_cards) == 1309
 
     def test_flush(self):
         community_cards = [
-            Card(Suit.SPADES, 1),
-            Card(Suit.SPADES, 2),
-            Card(Suit.SPADES, 3),
+            Card(1, Suit.SPADES),
+            Card(2, Suit.SPADES),
+            Card(3, Suit.SPADES),
         ]
         hole_cards = [
-            Card(Suit.SPADES, 4),
-            Card(Suit.SPADES, 5),
+            Card(4, Suit.SPADES),
+            Card(5, Suit.SPADES),
         ]
         assert Flush.matches(community_cards, hole_cards) == 5
 
     def test_royal_flush(self):
         hand = [
-            Card(Suit.DIAMONDS, 9),
-            Card(Suit.DIAMONDS, 10),
-            Card(Suit.DIAMONDS, 11),
-            Card(Suit.DIAMONDS, 12),
-            Card(Suit.DIAMONDS, 13),
+            Card(9, Suit.DIAMONDS),
+            Card(10, Suit.DIAMONDS),
+            Card(11, Suit.DIAMONDS),
+            Card(12, Suit.DIAMONDS),
+            Card(13, Suit.DIAMONDS),
         ]
         assert RoyalFlush.matches(hand[:3], hand[3:]) == 0
 
-    def test_straight(self):
+    def test_straight_1(self):
         hand = [
-            Card(Suit.DIAMONDS, 9),
-            Card(Suit.SPADES, 10),
-            Card(Suit.DIAMONDS, 11),
-            Card(Suit.CLUBS, 12),
-            Card(Suit.HEARTS, 13),
+            Card(9, Suit.DIAMONDS),
+            Card(10, Suit.SPADES),
+            Card(11, Suit.DIAMONDS),
+            Card(12, Suit.CLUBS),
+            Card(13, Suit.HEARTS),
         ]
         assert Straight.matches(hand[:3], hand[3:]) == 9
 
+    def test_straight_2(self):
+        community_cards = [
+            Card(9, Suit.DIAMONDS),
+            Card(10, Suit.SPADES),
+            Card(11, Suit.DIAMONDS),
+            Card(12, Suit.CLUBS),
+            Card(13, Suit.HEARTS),
+        ]
+        hole_cards = [
+            Card(7, Suit.SPADES),
+            Card(8, Suit.CLUBS),
+        ]
+        assert Straight.matches(community_cards, hole_cards) == 9
+
+    def test_straight_2(self):
+        community_cards = [
+            Card(13, Suit.DIAMONDS),
+            Card(3, Suit.SPADES),
+            Card(3, Suit.DIAMONDS),
+            Card(2, Suit.CLUBS),
+            Card(9, Suit.HEARTS),
+        ]
+        hole_cards = [
+            Card(1, Suit.SPADES),
+            Card(4, Suit.CLUBS),
+        ]
+        assert Straight.matches(community_cards, hole_cards) == 0
+
     def test_straight_flush(self):
         hand = [
-            Card(Suit.SPADES, 4),
-            Card(Suit.SPADES, 5),
-            Card(Suit.SPADES, 6),
-            Card(Suit.SPADES, 7),
-            Card(Suit.SPADES, 8),
+            Card(4, Suit.SPADES),
+            Card(5, Suit.SPADES),
+            Card(6, Suit.SPADES),
+            Card(7, Suit.SPADES),
+            Card(8, Suit.SPADES),
         ]
         assert StraightFlush.matches(hand[:3], hand[3:]) == 4
 
     def test_hand_compare_1(self):
-        hand1 = Hand([Card(Suit.SPADES, 1)], [])
-        hand2 = Hand([Card(Suit.SPADES, 2)], [])
+        hand1 = Hand([Card(1, Suit.SPADES)], [])
+        hand2 = Hand([Card(2, Suit.SPADES)], [])
         assert hand2 > hand1
 
     def test_hand_compare_2(self):
-        hand1 = Hand([Card(Suit.SPADES, 4)], [Card(Suit.SPADES, 5)])
-        hand2 = Hand([Card(Suit.SPADES, 5)], [])
+        hand1 = Hand([Card(4, Suit.SPADES)], [Card(5, Suit.SPADES)])
+        hand2 = Hand([Card(5, Suit.SPADES)], [])
         assert hand2 == hand1
 
     def test_hand_compare_3(self):
         community_cards = [
-            Card(Suit.SPADES, 3),
-            Card(Suit.CLUBS, 4),
-            Card(Suit.DIAMONDS, 5),
+            Card(3, Suit.SPADES),
+            Card(4, Suit.CLUBS),
+            Card(5, Suit.DIAMONDS),
         ]
         hole_cards1 = [
-            Card(Suit.SPADES, 1),
-            Card(Suit.HEARTS, 2),
+            Card(1, Suit.SPADES),
+            Card(2, Suit.HEARTS),
         ]
         hole_cards2 = [
-            Card(Suit.SPADES, 6),
-            Card(Suit.CLUBS, 7),
+            Card(6, Suit.SPADES),
+            Card(7, Suit.CLUBS),
         ]
         hand1 = Hand(community_cards, hole_cards1)
         assert hand1.order == 1
@@ -141,17 +169,17 @@ class Tests(unittest.TestCase):
 
     def test_hand_compare_4(self):
         community_cards = [
-            Card(Suit.SPADES, 9),
-            Card(Suit.SPADES, 10),
-            Card(Suit.SPADES, 11),
+            Card(9, Suit.SPADES),
+            Card(10, Suit.SPADES),
+            Card(11, Suit.SPADES),
         ]
         hole_cards1 = [
-            Card(Suit.SPADES, 12),
-            Card(Suit.SPADES, 13),
+            Card(12, Suit.SPADES),
+            Card(13, Suit.SPADES),
         ]
         hole_cards2 = [
-            Card(Suit.SPADES, 7),
-            Card(Suit.CLUBS, 8),
+            Card(7, Suit.SPADES),
+            Card(8, Suit.CLUBS),
         ]
         hand1 = Hand(community_cards, hole_cards1)
         assert hand1.order == 0
@@ -161,14 +189,14 @@ class Tests(unittest.TestCase):
 
     def test_hand_match_1(self):
         community_cards = [
-            Card(Suit.SPADES, 9),
-            Card(Suit.DIAMONDS, 9),
-            Card(Suit.CLUBS, 9),
-            Card(Suit.HEARTS, 8),
+            Card(9, Suit.SPADES),
+            Card(9, Suit.DIAMONDS),
+            Card(9, Suit.CLUBS),
+            Card(8, Suit.HEARTS),
         ]
         hole_cards = [
-            Card(Suit.HEARTS, 9),
-            Card(Suit.HEARTS, 2),
+            Card(9, Suit.HEARTS),
+            Card(2, Suit.HEARTS),
         ]
         hand = Hand(community_cards, hole_cards)
         assert PATTERNS_ORDER[hand.type] == FourOfAKind
@@ -176,13 +204,13 @@ class Tests(unittest.TestCase):
 
     def test_hand_match_2(self):
         community_cards = [
-            Card(Suit.HEARTS, 7),
-            Card(Suit.HEARTS, 8),
-            Card(Suit.HEARTS, 9),
+            Card(7, Suit.HEARTS),
+            Card(8, Suit.HEARTS),
+            Card(9, Suit.HEARTS),
         ]
         hole_cards = [
-            Card(Suit.HEARTS, 10),
-            Card(Suit.HEARTS, 11),
+            Card(10, Suit.HEARTS),
+            Card(11, Suit.HEARTS),
         ]
         hand = Hand(community_cards, hole_cards)
         assert PATTERNS_ORDER[hand.type] == StraightFlush
@@ -190,14 +218,14 @@ class Tests(unittest.TestCase):
 
     def test_hand_match_3(self):
         community_cards = [
-            Card(Suit.SPADES, 4),
-            Card(Suit.SPADES, 6),
-            Card(Suit.SPADES, 9),
-            Card(Suit.HEARTS, 2),
+            Card(4, Suit.SPADES),
+            Card(6, Suit.SPADES),
+            Card(9, Suit.SPADES),
+            Card(2, Suit.HEARTS),
         ]
         hole_cards = [
-            Card(Suit.SPADES, 10),
-            Card(Suit.SPADES, 12),
+            Card(10, Suit.SPADES),
+            Card(12, Suit.SPADES),
         ]
         hand = Hand(community_cards, hole_cards)
         assert PATTERNS_ORDER[hand.type] == Flush
@@ -205,15 +233,15 @@ class Tests(unittest.TestCase):
 
     def test_hand_match_4(self):
         community_cards = [
-            Card(Suit.CLUBS, 5),
-            Card(Suit.DIAMONDS, 5),
-            Card(Suit.HEARTS, 7),
-            Card(Suit.SPADES, 9),
-            Card(Suit.HEARTS, 2),
+            Card(5, Suit.CLUBS),
+            Card(5, Suit.DIAMONDS),
+            Card(7, Suit.HEARTS),
+            Card(9, Suit.SPADES),
+            Card(2, Suit.HEARTS),
         ]
         hole_cards = [
-            Card(Suit.HEARTS, 5),
-            Card(Suit.CLUBS, 6),
+            Card(5, Suit.HEARTS),
+            Card(6, Suit.CLUBS),
         ]
         hand = Hand(community_cards, hole_cards)
         assert PATTERNS_ORDER[hand.type] == ThreeOfAKind
@@ -221,13 +249,13 @@ class Tests(unittest.TestCase):
 
     def test_hand_match_5(self):
         community_cards = [
-            Card(Suit.SPADES, 1),
-            Card(Suit.HEARTS, 4),
-            Card(Suit.DIAMONDS, 8),
+            Card(1, Suit.SPADES),
+            Card(4, Suit.HEARTS),
+            Card(8, Suit.DIAMONDS),
         ]
         hole_cards = [
-            Card(Suit.CLUBS, 6),
-            Card(Suit.HEARTS, 13),
+            Card(6, Suit.CLUBS),
+            Card(13, Suit.HEARTS),
         ]
         hand = Hand(community_cards, hole_cards)
         assert PATTERNS_ORDER[hand.type] == HighCard

@@ -14,7 +14,7 @@ class Deck:
         for _ in range(full_decks):
             for suit in [Suit.HEARTS, Suit.DIAMONDS, Suit.SPADES, Suit.CLUBS]:
                 for value in range(1, 14):
-                    self.add_card(Card(suit, value))
+                    self.add_card(Card(value, suit))
 
     def add_card(self, card: Card):
         self.cards.append(card)

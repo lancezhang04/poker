@@ -39,7 +39,7 @@ class Card:
     }
     NAMES_TO_VALUES: Dict[str, int] = {v: k for k, v in VALUES_TO_NAMES.items()}
 
-    def __init__(self, suit: Suit, value: int):
+    def __init__(self, value: int, suit: Suit):
         assert 1 <= value <= 13 or value == -1
         self.suit = suit
         self.value = value

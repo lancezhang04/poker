@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 from drills.utils import clear_screen, print_ending_message
 
 from poker import Game
-from simulation.simulation import run_monte_carlo
+from simulation import run_monte_carlo
 
 
 def play_pre_flop(num_players: int=2, verbose: bool=False):

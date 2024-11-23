@@ -90,13 +90,20 @@ class Straight(PatternInterface):
         values = [c.value for c in community_cards + hole_cards]
         if len(values) < 5:
             return -1
-        cur = bottom = min(values)
-        values.remove(cur)
-        for dv in range(1, 5):
-            if cur + dv not in values:
-                return -1
-            values.remove(cur + dv)
-        return bottom
+        # account for ace as bottom card
+        if 13 in values:
+            values.append(0)
+
+        # remove duplicates and sort values
+        values = list(set(values))
+        values.sort()
+        for bottom in range(len(values) - 5, -1, -1):
+            bottom_val = values[bottom]
+            made_straight = False
+            if values[bottom + 4] != bottom_val + 4:
+                continue
+            return bottom_val
+        return -1
 
 
 class ThreeOfAKind(PatternInterface):
