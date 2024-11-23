@@ -113,7 +113,7 @@ class Tests(unittest.TestCase):
         ]
         assert Straight.matches(community_cards, hole_cards) == 9
 
-    def test_straight_2(self):
+    def test_straight_3(self):
         community_cards = [
             Card(13, Suit.DIAMONDS),
             Card(3, Suit.SPADES),
