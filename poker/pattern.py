@@ -17,24 +17,28 @@ class RoyalFlush(PatternInterface):
 
     @staticmethod
     def matches(community_cards: List[Card], hole_cards: List[Card]) -> int:
-        if Flush.matches(community_cards, hole_cards) == -1:
-            return -1
-        cards = {9, 10, 11, 12, 13}
-        hand = community_cards + hole_cards
-        for card in hand:
-            if card.value not in cards:
-                return -1
-            cards.remove(card.value)
-        return 0
+        cards = community_cards + hole_cards
+        for suit in range(4):
+            matching_cards = [card for card in cards if card.suit.value == suit]
+            # community cards vs. hole cards is irrelevant here
+            if len(matching_cards) >= 5 and Straight.matches(matching_cards, list()) == 9:
+                return 0
+        return -1
 
 
 class StraightFlush(PatternInterface):
 
     @staticmethod
     def matches(community_cards: List[Card], hole_cards: List[Card]) -> int:
-        if not Flush.matches(community_cards, hole_cards):
-            return -1
-        return Straight.matches(community_cards, hole_cards)
+        cards = community_cards + hole_cards
+        for suit in range(4):
+            matching_cards = [card for card in cards if card.suit.value == suit]
+            if len(matching_cards) < 5:
+                continue
+            straight_match_res = Straight.matches(matching_cards, list())
+            if straight_match_res != -1:
+                return straight_match_res
+        return -1
 
 class FourOfAKind(PatternInterface):
 

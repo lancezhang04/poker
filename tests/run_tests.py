@@ -79,7 +79,7 @@ class Tests(unittest.TestCase):
         ]
         assert Flush.matches(community_cards, hole_cards) == 5
 
-    def test_royal_flush(self):
+    def test_royal_flush_1(self):
         hand = [
             Card(9, Suit.DIAMONDS),
             Card(10, Suit.DIAMONDS),
@@ -88,6 +88,28 @@ class Tests(unittest.TestCase):
             Card(13, Suit.DIAMONDS),
         ]
         assert RoyalFlush.matches(hand[:3], hand[3:]) == 0
+
+    def test_royal_flush_2(self):
+        hand = [
+            Card(9, Suit.DIAMONDS),
+            Card(10, Suit.DIAMONDS),
+            Card(11, Suit.DIAMONDS),
+            Card(12, Suit.DIAMONDS),
+            Card(13, Suit.DIAMONDS),
+            Card(8, Suit.DIAMONDS)
+        ]
+        assert RoyalFlush.matches(hand[:3], hand[3:]) == 0
+
+    def test_royal_flush_3(self):
+        hand = [
+            Card(9, Suit.DIAMONDS),
+            Card(10, Suit.DIAMONDS),
+            Card(11, Suit.CLUBS),
+            Card(12, Suit.DIAMONDS),
+            Card(13, Suit.DIAMONDS),
+            Card(8, Suit.DIAMONDS)
+        ]
+        assert RoyalFlush.matches(hand[:3], hand[3:]) == -1
 
     def test_straight_1(self):
         hand = [
@@ -127,7 +149,7 @@ class Tests(unittest.TestCase):
         ]
         assert Straight.matches(community_cards, hole_cards) == 0
 
-    def test_straight_flush(self):
+    def test_straight_flush_1(self):
         hand = [
             Card(4, Suit.SPADES),
             Card(5, Suit.SPADES),
@@ -136,6 +158,17 @@ class Tests(unittest.TestCase):
             Card(8, Suit.SPADES),
         ]
         assert StraightFlush.matches(hand[:3], hand[3:]) == 4
+
+    def test_straight_flush_2(self):
+        hand = [
+            Card(4, Suit.SPADES),
+            Card(5, Suit.CLUBS),
+            Card(6, Suit.SPADES),
+            Card(7, Suit.SPADES),
+            Card(8, Suit.SPADES),
+            Card(2, Suit.SPADES)
+        ]
+        assert StraightFlush.matches(hand[:3], hand[3:]) == -1
 
     def test_hand_compare_1(self):
         hand1 = Hand([Card(1, Suit.SPADES)], [])
